@@ -46,3 +46,15 @@ except httpx.TimeoutException as e:
     print(f"Request timed out: {e}")
 except httpx.ConnectError as e:
     print(f"could not connect. Check your network: {e}")
+
+# cost tracking
+usage = response.usage_metadata
+input_tokens = usage.prompt_token_count # prompt_token_count = number of texts in a prompt
+output_tokens = usage.candidates_token_count # output_tokens = number of texts in a response given by model
+# output_tokens cost more than input_tokens
+input_cost = (input_tokens / 1_000_000) * 1.50
+output_cost = (output_tokens / 1_000_000) * 7.50
+total_cost = input_cost + output_cost
+
+print(f"Input tokens: {input_tokens}, Output tokens: {output_tokens}")
+print(f"Cost this run: ${total_cost:.6f}")
